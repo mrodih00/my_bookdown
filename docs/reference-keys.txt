@@ -1,0 +1,3 @@
+in-this-project-we-want-to-analyse-two-dataset.-the-first-dataset-we-are-going-to-use-is-related-with-the-sales-of-a-shop-from-september-2023-until-september-2024-and-the-main-idea-is-to-look-for-the-principal-income-of-the-shop-from-which-item-we-can-obtain-more-money-or-which-is-the-less-bought-item-.-the-second-dataset-is-related-with-the-workers-of-data-and-hr-department-of-an-industry-we-can-look-for-important-resources-such-us-gender-years-at-the-company-job-level-and-the-income-of-the-worker.
+the-pool-of-tears
+a-caucus-race-and-a-long-tale
