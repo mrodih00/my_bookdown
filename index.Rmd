@@ -5,5 +5,5 @@ date: "03-02-2026"
 site: bookdown::bookdown_site
 ---
 
-# Down the rabbit-hole
+# In this project, we want to analyse two dataset. The first dataset we are going to use is related with the sales of a shop from September 2023 until September 2024, and the main idea is to look for the principal income of the shop and from which item we can obtain more value.
 
