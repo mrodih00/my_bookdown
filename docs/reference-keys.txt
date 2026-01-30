@@ -1,5 +1,4 @@
 methods
 plotting-amounts
-we-want-to-see-the-amount-of-money-earned-in-the-store-with-the-different-products-offered.-with-this-although-we-would-still-need-to-analyze-the-price-we-pay-to-have-that-product-in-the-store-we-can-consider-which-product-brings-us-the-most-money-and-which-one-brings-us-the-least.-for-this-we-first-group-the-colums-product-type-and-we-sum-the-total-price-of-that-product-and-after-that-we-separate-it-into-the-different-categories-for-the-barplot.
 the-pool-of-tears
 a-caucus-race-and-a-long-tale
