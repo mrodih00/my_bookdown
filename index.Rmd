@@ -28,6 +28,7 @@ We want to see the amount of money earned in the store with the different produc
 
 ```{r}
 sales_data <- read_csv("data/Electronic_sales_Sep2023-Sep2024.csv")
+hr_data <- read_csv("Data/HR-Employee-Attrition.csv")
 
 money_by_product <- sales_data %>%
   group_by(`Product Type`) %>%
@@ -79,10 +80,10 @@ ggplot(sales_payment,
 ## Proportions
 ```{r}
 orders_by_shipping <- sales_data %>%
-  count(`Shipping Type`) %>%
+  count(`Shipping Type`) %>% 
   mutate(
     fraction = n / sum(n),
-    label = paste0(`Shipping Type`, "\n", n, " (", percent(fraction), ")")
+    label = paste0(`Shipping Type`, "\n", n, " (", scales::percent(fraction), ")")
   )
 
 ggplot(orders_by_shipping, aes(x = "", y = n, fill = label)) +
@@ -91,19 +92,30 @@ ggplot(orders_by_shipping, aes(x = "", y = n, fill = label)) +
   labs(
     title = "Orders by Shipping Type",
     fill = "Shipping Type"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "right"
   )
+
 ```
 ```{r}
 orders_by_product <- sales_data %>%
   count(`Product Type`)
 
-ggplot(orders_by_product,
-       aes(area = n,
-           fill = `Product Type`,
-           label = paste0(`Product Type`, "\n", n))) +
+ggplot(orders_by_product, aes(
+  area = n,
+  fill = `Product Type`,
+  label = paste0(`Product Type`, "\n", n)
+)) +
   geom_treemap() +
-  geom_treemap_text(colour = "white", place = "left", grow = TRUE) +
+  geom_treemap_text(
+    colour = "white",
+    place = "left",
+    grow = TRUE
+  ) +
   labs(title = "Orders by Product Type")
+
 ```
 
 ## Distributions
@@ -112,17 +124,24 @@ ggplot(orders_by_product,
 sales_mirror <- sales_data %>%
   group_by(`Product Type`, Gender) %>%
   summarise(n_orders = n(), .groups = "drop") %>%
-  mutate(n_orders_mirror = ifelse(Gender == "Male", -n_orders, n_orders))
+  mutate(
+    n_orders_mirror = ifelse(Gender == "Male", -n_orders, n_orders)
+  )
 
-ggplot(sales_mirror,
-       aes(x = `Product Type`, y = n_orders_mirror, fill = Gender)) +
-  geom_col(alpha = 0.6) +
+ggplot(sales_mirror, aes(x = `Product Type`, y = n_orders_mirror, fill = Gender)) +
+  geom_bar(data = subset(sales_mirror, Gender == "Male"),
+           aes(x = `Product Type`, y = n_orders_mirror),
+           stat = "identity", alpha = 0.6, fill = "blue") +
+  geom_bar(data = subset(sales_mirror, Gender == "Female"),
+           aes(x = `Product Type`, y = n_orders_mirror),
+           stat = "identity", alpha = 0.6, fill = "pink") +
   geom_text(aes(label = n_orders),
+            data = sales_mirror,
             position = position_stack(vjust = 0.5),
             color = "white") +
-  scale_y_continuous(labels = function(x) label_comma()(abs(x))) +
+  scale_y_continuous(labels = function(x) scales::label_comma()(abs(x))) +
   labs(
-    title = "Purchases by Product Type and Gender",
+    title = "Purchases by Product Type for each Gender",
     x = "Product Type",
     y = "Number of Orders"
   )
@@ -133,13 +152,19 @@ sales_clean <- sales_data %>%
 
 ggplot(sales_clean, aes(x = `Total Price`, fill = Gender)) +
   geom_density(alpha = 0.7) +
-  scale_x_continuous(labels = label_comma()) +
-  facet_wrap(~Gender, ncol = 1) +
+  scale_fill_manual(values = c("Male" = "blue", "Female" = "pink")) +
+  scale_x_continuous(labels = scales::label_comma()) +
   labs(
     title = "Density of Total Purchases by Gender",
     x = "Total Price",
-    y = "Density"
-  )
+    y = "Density",
+    fill = "Gender"
+  ) +
+  facet_wrap(~Gender, ncol = 1) + 
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+    )
 ```
 ## Trends
 
@@ -147,17 +172,19 @@ ggplot(sales_clean, aes(x = `Total Price`, fill = Gender)) +
 sales_daily <- sales_data %>%
   mutate(Purchase_Date = as.Date(`Purchase Date`)) %>%
   group_by(Purchase_Date) %>%
-  summarise(avg_spent = mean(`Total Price`, na.rm = TRUE))
+  summarise(
+    avg_spent = mean(`Total Price`, na.rm = TRUE),
+    .groups = "drop"
+  )
 
-ggplot(sales_daily,
-       aes(x = Purchase_Date, y = avg_spent)) +
+ggplot(sales_daily, aes(x = Purchase_Date, y = avg_spent)) +
   geom_point(alpha = 0.3) +
-  theme_minimal() +
   labs(
     title = "Average Daily Sales",
     x = "Purchase Date",
     y = "Average Total Price"
-  )
+  ) +
+  theme_minimal()
 ```
 
 ```{r}
@@ -165,13 +192,110 @@ sales_daily_gender <- sales_data %>%
   filter(Gender %in% c("Male", "Female")) %>%
   mutate(Purchase_Date = as.Date(`Purchase Date`)) %>%
   group_by(Purchase_Date, Gender) %>%
-  summarise(avg_spent = mean(`Total Price`, na.rm = TRUE), .groups = "drop")
+  summarise(
+    avg_spent = mean(`Total Price`, na.rm = TRUE),
+    .groups = "drop"
+  )
 
 ggplot(sales_daily_gender,
        aes(x = Purchase_Date, y = avg_spent, color = Gender)) +
   geom_point(alpha = 0.25) +
   geom_smooth(method = "loess", span = 0.2, se = FALSE) +
   theme_minimal()
+```
+
+## Distributions 2
+```{r}
+hr_dist <- hr_data %>%
+  mutate(
+    YearsGroup = cut(
+      YearsAtCompany,
+      breaks = c(0, 2, 5, 10, 20, 40),
+      labels = c("0–2", "3–5", "6–10", "11–20", "20+"),
+      right = FALSE
+    )
+  ) %>%
+  filter(!is.na(YearsGroup))
+  
+ggplot(hr_dist, aes(x = YearsGroup, y = MonthlyIncome)) +
+  geom_boxplot(outlier.alpha = 0.3) +
+  scale_y_continuous(labels = scales::label_comma()) +
+  labs(
+    title = "Monthly Income vs Years at Company",
+    x = "Years at Company",
+    y = "Monthly Income"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+hr_violin <- hr_data %>%
+  mutate(JobLevel = factor(JobLevel))
+
+ggplot(hr_violin, aes(x = JobLevel, y = MonthlyIncome)) +
+  geom_violin(fill = "steelblue", alpha = 0.7, trim = FALSE) +
+  scale_y_continuous(labels = scales::label_comma()) +
+  labs(
+    title = "Monthly Income vs Job Level",
+    x = "Job Level",
+    y = "Monthly Income"
+  ) +
+  theme_minimal()
+
+```
+## Visualizing uncertaintly
+```{r}
+hr_summary_years <- hr_data %>%
+  filter(!is.na(MonthlyIncome) & !is.na(YearsAtCompany)) %>%
+  group_by(YearsAtCompany) %>%
+  summarise(
+    mean_income = mean(MonthlyIncome),
+    sd_income = sd(MonthlyIncome),
+    n = n(),
+    se_income = sd_income / sqrt(n),
+    ci_low = mean_income - 1.96 * se_income,
+    ci_high = mean_income + 1.96 * se_income
+  ) %>%
+  ungroup() %>%
+  arrange(YearsAtCompany)
+
+ggplot(hr_summary_years, aes(x = mean_income, y = YearsAtCompany)) +
+  geom_point(size = 3, color = "darkgreen") +
+  geom_errorbarh(aes(xmin = ci_low, xmax = ci_high), height = 0.3, color = "darkgreen") +
+  scale_x_continuous(labels = scales::label_comma()) +
+  labs(
+    title = "Mean Monthly Income by Years at Company (95% CI)",
+    x = "Mean Monthly Income",
+    y = "Years at Company"
+  ) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+```{r}
+hr_plot <- hr_data %>%
+  filter(!is.na(MonthlyIncome) & !is.na(JobLevel))
+ggplot(hr_plot, aes(x = JobLevel, y = MonthlyIncome)) +
+  geom_jitter(width = 0.2, height = 0, alpha = 0.3, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, level = 0.80,
+              aes(fill = "80% CI"), color = "lightgreen", alpha = 0.2, linewidth = 1.1) +
+  geom_smooth(method = "lm", se = TRUE, level = 0.95,
+              aes(fill = "95% CI"), color = "indianred", alpha = 0.2, linewidth = 1.1) +
+  geom_smooth(method = "lm", se = TRUE, level = 0.99,
+              aes(fill = "99% CI"), color = "lightblue", alpha = 0.1, linewidth = 1.1) +
+  scale_fill_manual(name = "Confidence Interval",
+                    values = c("80% CI" = "green",
+                               "95% CI" = "red",
+                               "99% CI" = "blue")) +
+  scale_y_continuous(labels = scales::label_comma()) +
+  scale_x_continuous(breaks = unique(hr_plot$JobLevel)) +
+  labs(
+    title = "Monthly Income vs Job Level with CI",
+    x = "Job Level",
+    y = "Monthly Income"
+  ) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 ```
 
 
