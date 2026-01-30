@@ -8,4 +8,37 @@ site: bookdown::bookdown_site
 # In this project, we want to analyse two dataset. The first dataset we are going to use is related with the sales of a shop from September 2023 until September 2024, and the main idea is to look for the principal income of the shop, from which item we can obtain more money or which is the less bought item . The second dataset is related with the workers of data and HR-department of an industry, we can look for important resources such us Gender, Years at the Company, Job Level and the income of the worker.
 
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
 
+library(tidyverse)
+library(scales)
+library(ggforce)
+library(ggrepel)
+library(treemapify)
+```
+
+```{r}
+sales_data <- read_csv("Data/Electronic_sales_Sep2023-Sep2024.csv")
+
+money_by_product <- sales_data %>%
+  group_by(`Product Type`) %>%
+  summarise(total_sales = sum(`Total Price`)) %>%
+  ungroup()
+
+ggplot(money_by_product,
+       aes(x = fct_reorder(`Product Type`, total_sales),
+           y = total_sales)) +
+  geom_col(fill = "blue") +
+  coord_flip() +
+  scale_y_continuous(labels = label_comma()) +
+  labs(
+    title = "Total Sales of each Product Type",
+    x = "Product Type",
+    y = "Total Sales"
+  )
+```
