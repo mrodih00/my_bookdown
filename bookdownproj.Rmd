@@ -4,6 +4,7 @@ author: "Miguel Rodicio Honrado"
 date: "03-02-2026"
 site: bookdown::bookdown_site
 ---
+# Methods
 ## Plotting amounts
 ### In this project, we want to analyse two dataset. The first dataset we are going to use is related with the sales of a shop from September 2023 until September 2024, and the main idea is to look for the principal income of the shop, from which item we can obtain more money or which is the less bought item . The second dataset is related with the workers of data and HR-department of an industry, we can look for important resources such us Gender, Years at the Company, Job Level and the income of the worker.
 
@@ -42,6 +43,33 @@ ggplot(money_by_product,
     title = "Total Sales of each Product Type",
     x = "Product Type",
     y = "Total Sales"
+  )
+```
+
+```{r}
+sales_payment <- sales_data %>%
+  group_by(`Payment Method`) %>%
+  summarise(
+    mean_price = mean(`Total Price`, na.rm = TRUE),
+    median_price = median(`Total Price`, na.rm = TRUE)
+  ) %>%
+  pivot_longer(
+    cols = c(mean_price, median_price),
+    names_to = "Statistic",
+    values_to = "Value"
+  )
+
+ggplot(sales_payment,
+       aes(x = fct_reorder(`Payment Method`, Value),
+           y = Value,
+           color = Statistic)) +
+  geom_point(size = 5) +
+  coord_flip() +
+  scale_y_continuous(labels = label_comma()) +
+  labs(
+    title = "Mean and Median Price by Payment Method",
+    x = "Payment Method",
+    y = "Total Price"
   )
 ```
 
