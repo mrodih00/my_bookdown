@@ -105,3 +105,73 @@ ggplot(orders_by_product,
   geom_treemap_text(colour = "white", place = "left", grow = TRUE) +
   labs(title = "Orders by Product Type")
 ```
+
+## Distributions
+
+```{r}
+sales_mirror <- sales_data %>%
+  group_by(`Product Type`, Gender) %>%
+  summarise(n_orders = n(), .groups = "drop") %>%
+  mutate(n_orders_mirror = ifelse(Gender == "Male", -n_orders, n_orders))
+
+ggplot(sales_mirror,
+       aes(x = `Product Type`, y = n_orders_mirror, fill = Gender)) +
+  geom_col(alpha = 0.6) +
+  geom_text(aes(label = n_orders),
+            position = position_stack(vjust = 0.5),
+            color = "white") +
+  scale_y_continuous(labels = function(x) label_comma()(abs(x))) +
+  labs(
+    title = "Purchases by Product Type and Gender",
+    x = "Product Type",
+    y = "Number of Orders"
+  )
+```
+```{r}
+sales_clean <- sales_data %>%
+  filter(!is.na(Gender) & Gender != "#N/A")
+
+ggplot(sales_clean, aes(x = `Total Price`, fill = Gender)) +
+  geom_density(alpha = 0.7) +
+  scale_x_continuous(labels = label_comma()) +
+  facet_wrap(~Gender, ncol = 1) +
+  labs(
+    title = "Density of Total Purchases by Gender",
+    x = "Total Price",
+    y = "Density"
+  )
+```
+## Trends
+
+```{r}
+sales_daily <- sales_data %>%
+  mutate(Purchase_Date = as.Date(`Purchase Date`)) %>%
+  group_by(Purchase_Date) %>%
+  summarise(avg_spent = mean(`Total Price`, na.rm = TRUE))
+
+ggplot(sales_daily,
+       aes(x = Purchase_Date, y = avg_spent)) +
+  geom_point(alpha = 0.3) +
+  theme_minimal() +
+  labs(
+    title = "Average Daily Sales",
+    x = "Purchase Date",
+    y = "Average Total Price"
+  )
+```
+
+```{r}
+sales_daily_gender <- sales_data %>%
+  filter(Gender %in% c("Male", "Female")) %>%
+  mutate(Purchase_Date = as.Date(`Purchase Date`)) %>%
+  group_by(Purchase_Date, Gender) %>%
+  summarise(avg_spent = mean(`Total Price`, na.rm = TRUE), .groups = "drop")
+
+ggplot(sales_daily_gender,
+       aes(x = Purchase_Date, y = avg_spent, color = Gender)) +
+  geom_point(alpha = 0.25) +
+  geom_smooth(method = "loess", span = 0.2, se = FALSE) +
+  theme_minimal()
+```
+
+
