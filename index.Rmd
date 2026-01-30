@@ -23,7 +23,7 @@ library(treemapify)
 ```
 
 ```{r}
-sales_data <- read_csv("Data/Electronic_sales_Sep2023-Sep2024.csv")
+sales_data <- read_csv("data/Electronic_sales_Sep2023-Sep2024.csv")
 
 money_by_product <- sales_data %>%
   group_by(`Product Type`) %>%
