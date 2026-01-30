@@ -1,4 +1,5 @@
 methods
 plotting-amounts
+proportions
 the-pool-of-tears
 a-caucus-race-and-a-long-tale

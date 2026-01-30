@@ -75,3 +75,33 @@ ggplot(sales_payment,
     y = "Total Price"
   )
 ```
+
+## Proportions
+```{r}
+orders_by_shipping <- sales_data %>%
+  count(`Shipping Type`) %>%
+  mutate(
+    fraction = n / sum(n),
+    label = paste0(`Shipping Type`, "\n", n, " (", percent(fraction), ")")
+  )
+
+ggplot(orders_by_shipping, aes(x = "", y = n, fill = label)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  labs(
+    title = "Orders by Shipping Type",
+    fill = "Shipping Type"
+  )
+```
+```{r}
+orders_by_product <- sales_data %>%
+  count(`Product Type`)
+
+ggplot(orders_by_product,
+       aes(area = n,
+           fill = `Product Type`,
+           label = paste0(`Product Type`, "\n", n))) +
+  geom_treemap() +
+  geom_treemap_text(colour = "white", place = "left", grow = TRUE) +
+  labs(title = "Orders by Product Type")
+```
