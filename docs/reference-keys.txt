@@ -1,3 +1,5 @@
+plotting-amounts
 in-this-project-we-want-to-analyse-two-dataset.-the-first-dataset-we-are-going-to-use-is-related-with-the-sales-of-a-shop-from-september-2023-until-september-2024-and-the-main-idea-is-to-look-for-the-principal-income-of-the-shop-from-which-item-we-can-obtain-more-money-or-which-is-the-less-bought-item-.-the-second-dataset-is-related-with-the-workers-of-data-and-hr-department-of-an-industry-we-can-look-for-important-resources-such-us-gender-years-at-the-company-job-level-and-the-income-of-the-worker.
+we-want-to-see-the-amount-of-money-earned-in-the-store-with-the-different-products-offered.-with-this-although-we-would-still-need-to-analyze-the-price-we-pay-to-have-that-product-in-the-store-we-can-consider-which-product-brings-us-the-most-money-and-which-one-brings-us-the-least.-for-this-we-first-group-the-colums-product-type-and-we-sum-the-total-price-of-that-product-and-after-that-we-separate-it-into-the-different-categories-for-the-barplot.
 the-pool-of-tears
 a-caucus-race-and-a-long-tale
