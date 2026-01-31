@@ -169,10 +169,7 @@ ggplot(sales_clean, aes(x = `Total Price`, fill = Gender)) +
     fill = "Gender"
   ) +
   facet_wrap(~Gender, ncol = 1) + 
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, face = "bold")
-    )
+  theme_minimal() 
 ```
 ## Trends
 
@@ -258,9 +255,9 @@ ggplot(hr_violin, aes(x = JobLevel, y = MonthlyIncome)) +
   theme_minimal()
 
 ```
-
-
 ## Visualizing uncertaintly
+
+Now we will use a diagram to see the mean income at the Company during the Years at the company but with an IC of the 95%. Every dot is a mean and the bars are the IC. As in the other one we can observe that during the years the salary tends to increase, however most of the bars (IC) increase too. This means that there are more variability in salaries with the pass of the years and the mean is calculated with less precision. This can be because there are some variation between Job Roles and Job Levels.
 
 ```{r}
 hr_summary_years <- hr_data %>%
@@ -289,6 +286,7 @@ ggplot(hr_summary_years, aes(x = mean_income, y = YearsAtCompany)) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 ```
+We can observe that according to the Job Level the income increase sharply, this means that high Job Level, high salary. Here we find 3 IC (80%, 95% adn 99%). The 80% is the narrowest one while the 99% is the widest one. The narrowest is more certain about the predicted income while the wider one as more variability. A higher concentration of salaries is represented with a higher density of dots. That is why there is less concentration of dots in the last levels.
 
 ```{r}
 hr_plot <- hr_data %>%
