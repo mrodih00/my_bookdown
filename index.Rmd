@@ -125,7 +125,7 @@ ggplot(orders_by_product, aes(
 
 ## Distributions
 
-Now we will analyse the different purchases by men and women. In this graph we can see that the sales are balanced between them and we can not observe big difference in any product. The smartphone continues to be the most sold item despite of the gender with approximately 3000 sales from each gender. We can observe a little difference in the headphones, where men tends to buy more than women, however women tends to buy more smatwatches. 
+Now we will analyse the different purchases by men and women. In this graph we can see that the sales are balanced between them and we can not observe big difference in any product. The smartphone continues to be the most sold item despite of the gender with approximately 3000 sales from each gender. We can observe a little difference in the headphones, where male tends to buy more than female, however female customers tends to buy more smatwatches. 
 ```{r}
 sales_mirror <- sales_data %>%
   group_by(`Product Type`, Gender) %>%
@@ -152,6 +152,8 @@ ggplot(sales_mirror, aes(x = `Product Type`, y = n_orders_mirror, fill = Gender)
     y = "Number of Orders"
   )
 ```
+This density plot represents the total price per purchase by gender. We can see that both graphs are really similar and we can find in both cases an asymmetrical graph to the left. We observe that despite male or female, the highest concentration of sales are for low purchases (between 0 and 2000) with less ones to the right. Looking at this graph we can suggest that gender does not have any significant influence on the total amount spend.
+
 ```{r}
 sales_clean <- sales_data %>%
   filter(!is.na(Gender) & Gender != "#N/A")
