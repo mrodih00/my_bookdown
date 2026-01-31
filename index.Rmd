@@ -176,6 +176,8 @@ ggplot(sales_clean, aes(x = `Total Price`, fill = Gender)) +
 ```
 ## Trends
 
+This is a graph that shows the average total sales of a day during the year. In the first months (from oct 2023 - january 2024) we can see that sales are a little bit low compared with the rest of the months but the graph tends to increase during the months (steady upward). Maybe this is because seasonal effects or marketing campaigns.
+
 ```{r}
 sales_daily <- sales_data %>%
   mutate(Purchase_Date = as.Date(`Purchase Date`)) %>%
@@ -194,6 +196,7 @@ ggplot(sales_daily, aes(x = Purchase_Date, y = avg_spent)) +
   ) +
   theme_minimal()
 ```
+Despite is not the same graph but very similar, we can observe the difference of the average spend in female and male. For this we will work with the mean values. For the first months, we can observe that female tends to spend a more than male. However during the 6 last months it stays equal with a small difference in some days.
 
 ```{r}
 sales_daily_gender <- sales_data %>%
@@ -213,6 +216,8 @@ ggplot(sales_daily_gender,
 ```
 
 ## Distributions 2
+
+Thanks to this boxplot we can observe the monthly income related with the years at the company and we can confirm that it is directly related one with each other. We can observe that the mean of each category is higher than the previous one and the graph tends to increase over the years. There are also some outliers in most of the categories but they are not relevant. The last category increase extremely compared with the previous one, with a mean value of about 17000. Also the whiskers becomes larger with the past of the years, this can mean that during the years the workers are more distributed by their salary and Job Level.
 
 ```{r}
 hr_dist <- hr_data %>%
@@ -236,6 +241,7 @@ ggplot(hr_dist, aes(x = YearsGroup, y = MonthlyIncome)) +
   ) +
   theme_minimal()
 ```
+This violin diagram shows us that a higher Job Level is directly related to a better income. We can obtain rally useful information in every Leval. For the first one we can see that the violin is narrower and concentrated, indicating that most employees earn monstly the same. In the second level. Job levels 2, 3, and 4 are similar. We observe that they are longer and than the first one and this is because in this levels are more distribution of job roles (categories). Finally we observe that the concentration of the last one is really dense, indicating that the income is very concentrated and there are not too much job roles.
 
 ```{r}
 hr_violin <- hr_data %>%
@@ -252,6 +258,8 @@ ggplot(hr_violin, aes(x = JobLevel, y = MonthlyIncome)) +
   theme_minimal()
 
 ```
+
+
 ## Visualizing uncertaintly
 
 ```{r}
