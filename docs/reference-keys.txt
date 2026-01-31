@@ -3,5 +3,3 @@ plotting-amounts
 proportions
 distributions
 distributions-2
-the-pool-of-tears
-a-caucus-race-and-a-long-tale

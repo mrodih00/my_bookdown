@@ -78,6 +78,9 @@ ggplot(sales_payment,
 ```
 
 ## Proportions
+
+Another important data that we should work with it is the different shipping methods in the store. So we consider that a pie chart is suitable for the case. In the graph we can see that the most used method is the "Standard" with about 33.6% of the shipping. However we can observe that the other faster methods are balanced with about 16% each. This gives us the conclusion that customers prefer the cheapest shipping methods despite that the others are faster than the Standar.
+
 ```{r}
 orders_by_shipping <- sales_data %>%
   count(`Shipping Type`) %>% 
@@ -99,6 +102,8 @@ ggplot(orders_by_shipping, aes(x = "", y = n, fill = label)) +
   )
 
 ```
+Now we should look for the most sold products (not the ones that gives us the more income) and we can relate with the first graph. As we can observe, the most sold item are smartphones that matches with the first graph. We can also see that tablet, laptop and smart watch are really similar, however the one that produces the second better income are the smart watches while here we can see that the second most sold item are the tablets. Finally the less sold item are the headphones which are also the items with the less income.
+
 ```{r}
 orders_by_product <- sales_data %>%
   count(`Product Type`)
@@ -120,6 +125,7 @@ ggplot(orders_by_product, aes(
 
 ## Distributions
 
+Now we will analyse the different purchases by men and women. In this graph we can see that the sales are balanced between them and we can not observe big difference in any product. The smartphone continues to be the most sold item despite of the gender with approximately 3000 sales from each gender. We can observe a little difference in the headphones, where men tends to buy more than women, however women tends to buy more smatwatches. 
 ```{r}
 sales_mirror <- sales_data %>%
   group_by(`Product Type`, Gender) %>%
@@ -205,6 +211,7 @@ ggplot(sales_daily_gender,
 ```
 
 ## Distributions 2
+
 ```{r}
 hr_dist <- hr_data %>%
   mutate(
@@ -244,6 +251,7 @@ ggplot(hr_violin, aes(x = JobLevel, y = MonthlyIncome)) +
 
 ```
 ## Visualizing uncertaintly
+
 ```{r}
 hr_summary_years <- hr_data %>%
   filter(!is.na(MonthlyIncome) & !is.na(YearsAtCompany)) %>%
