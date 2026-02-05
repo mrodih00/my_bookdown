@@ -659,3 +659,6 @@ For the first dataset we can confirm that the most sold item is the smartphone, 
 For the second dataset we can confirm that the salary is linearly related with the years at the company, this means that more years more income. Mostly the same happens when we talk about Job Level because it is also linearly realted that we you advanced in your job, you get a better income.
 
 >>>>>>> 4c5dddeb5af3ca7467dcd12272b84415859fc0a9
+
+<!--chapter:end:index.Rmd-->
+
