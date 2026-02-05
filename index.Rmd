@@ -1,5 +1,5 @@
 --- 
-title: "HR_Sales_Bookdown"
+title: "General Analysis of Income"
 author: "Miguel Rodicio Honrado"
 date: "03-02-2026"
 site: bookdown::bookdown_site
@@ -7,8 +7,6 @@ site: bookdown::bookdown_site
 # Methods
 
 In this project, we want to analyse two dataset. The first dataset we are going to use is related with the sales of a shop from September 2023 until September 2024, and the main idea is to look for the principal income of the shop, from which item we can obtain more money or which is the less bought item . The second dataset is related with the workers of data and HR-department of an industry, we can look for important resources such us Gender, Years at the Company, Job Level and the income of the worker.
-
-The goal is to do a general analysis about the principal items that can be bought, which is the most sold one and which is the less sold one. Also talk about the one that gives us the best income and the one that gives us the worst income. Another part of the analysis is to look for the principal shipping methods and try to find why that method is the most used one and finally the principal payment methods. 
 
 ## Plotting amounts
 
@@ -54,6 +52,7 @@ It is also important to know which payment methods generate the most profit for 
 
 ```{r}
 sales_payment <- sales_data %>%
+  mutate(`Payment Method` = str_to_title(`Payment Method`)) %>%
   group_by(`Payment Method`) %>%
   summarise(
     mean_price = mean(`Total Price`, na.rm = TRUE),
@@ -98,6 +97,7 @@ ggplot(orders_by_shipping, aes(x = "", y = n, fill = label)) +
     title = "Orders by Shipping Type",
     fill = "Shipping Type"
   ) +
+  theme_void() +
   theme(
     plot.title = element_text(hjust = 0.5, face = "bold"),
     legend.position = "right"
@@ -323,4 +323,7 @@ ggplot(hr_plot, aes(x = JobLevel, y = MonthlyIncome)) +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 ```
 
+In conclusion:
+For the first dataset we can confirm that the most sold item is the smartphone, however we can observe that the smartwatch is a really worthwhile because even though there is no the most sold item (it is the fourth) it provide us the second better income. Also we can confirm that people prefer the standard shipping method because it is cheaper and that the rest of the faster methods are mostly balanced. In the payment method we can observe that Bank transfer is used for big sales while cash is used for the lowest ones.
+For the second dataset we can confirm that the salary is linearly related with the years at the company, this means that more years more income. Mostly the same happens when we talk about Job Level because it is also linearly realted that we you advanced in your job, you get a better income.
 
